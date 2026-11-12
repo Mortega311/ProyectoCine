@@ -74,7 +74,7 @@ public class Funcion {
     public boolean ocuparAsiento (String codigo) {
         Asiento asiento = buscarAsiento(codigo);
         if (asiento != null) {
-            if (asiento.getDisponible()) {
+            if (asiento.isDisponible()) {
                 asiento.setDisponible(false);
                 return true;
             }
@@ -84,7 +84,7 @@ public class Funcion {
     public boolean liberarAsiento (String codigo){
         Asiento asiento = buscarAsiento(codigo);
             if (asiento != null) {
-                if (!asiento.getDisponible()) {
+                if (!asiento.isDisponible()) {
                     asiento.setDisponible(true);
                     return true;
                 }
@@ -95,7 +95,7 @@ public class Funcion {
         List<Asiento> listaAsientosDisponibles = new ArrayList<>();
         List<Asiento> listaAsientos= sala.getListaAsientos();
         for (Asiento asiento: listaAsientos){
-            if (asiento.getDisponible()){
+            if (asiento.isDisponible()){
                 listaAsientosDisponibles.add(asiento);
             }
         }
