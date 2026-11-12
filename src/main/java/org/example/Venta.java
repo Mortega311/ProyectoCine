@@ -46,4 +46,13 @@ public class Venta {
     public void setEstadoVenta(boolean estadoVenta) {
         this.estadoVenta = estadoVenta;
     }
+
+    public void cancelar() {
+        if (this.estadoVenta == true) {
+            this.estadoVenta = false; // Cambia el estado a cancelada
+            System.out.println("La venta con código " + this.codigo + " ha sido cancelada correctamente.");
+        } else {
+            System.out.println("Error: La venta con código " + this.codigo + " ya se encuentra cancelada.");
+        }
+    }
 }
