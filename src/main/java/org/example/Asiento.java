@@ -4,11 +4,9 @@ public class Asiento {
     private String codigo;
     private int fila;
     private int numero;
+    private boolean estadoAsiento;
 
-    //RELACIONES
-    private EstadoAsiento estadoAsiento;
-
-    public Asiento(String codigo, int fila, int numero, EstadoAsiento estadoAsiento) {
+    public Asiento(String codigo, int fila, int numero, boolean estadoAsiento) {
         this.codigo = codigo;
         this.fila = fila;
         this.numero = numero;
@@ -39,11 +37,11 @@ public class Asiento {
         this.numero = numero;
     }
 
-    public EstadoAsiento getEstadoAsiento() {
+    public boolean isEstadoAsiento() {
         return estadoAsiento;
     }
 
-    public void setEstadoAsiento(EstadoAsiento estadoAsiento) {
+    public void setEstadoAsiento(boolean estadoAsiento) {
         this.estadoAsiento = estadoAsiento;
     }
 }
