@@ -8,15 +8,15 @@ public class Pelicula {
     private String nombre;
     private String genero;
     private LocalTime duracion;
+    private boolean estadoPelicula;
 
     //RELACIONES
-    private EstadoPelicula estadoPelicula;
     private ClasificacionPelicula clasificacionPelicula;
     private List<Funcion> listaFunciones;
 
 
     public Pelicula(String codigo, String nombre, String genero, LocalTime duracion,
-                    EstadoPelicula estadoPelicula, ClasificacionPelicula clasificacionPelicula,
+                    boolean estadoPelicula, ClasificacionPelicula clasificacionPelicula,
                     List<Funcion> listaFunciones) {
         this.codigo = codigo;
         this.nombre = nombre;
@@ -60,11 +60,27 @@ public class Pelicula {
         this.duracion = duracion;
     }
 
-    public EstadoPelicula getEstadoPelicula() {
+    public boolean isEstadoPelicula() {
         return estadoPelicula;
     }
 
-    public void setEstadoPelicula(EstadoPelicula estadoPelicula) {
+    public void setEstadoPelicula(boolean estadoPelicula) {
         this.estadoPelicula = estadoPelicula;
+    }
+
+    public ClasificacionPelicula getClasificacionPelicula() {
+        return clasificacionPelicula;
+    }
+
+    public void setClasificacionPelicula(ClasificacionPelicula clasificacionPelicula) {
+        this.clasificacionPelicula = clasificacionPelicula;
+    }
+
+    public List<Funcion> getListaFunciones() {
+        return listaFunciones;
+    }
+
+    public void setListaFunciones(List<Funcion> listaFunciones) {
+        this.listaFunciones = listaFunciones;
     }
 }
