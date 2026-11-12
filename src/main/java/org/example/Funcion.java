@@ -2,6 +2,7 @@ package org.example;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public class Funcion {
     private String codigo;
@@ -11,6 +12,7 @@ public class Funcion {
 
     //RELACIONES
     private EstadoFuncion estadoFuncion;
+    private Sala sala;
 
 
     public Funcion(String codigo, LocalDate fecha, LocalTime hora, double valorBase,
@@ -60,5 +62,43 @@ public class Funcion {
 
     public void setEstadoFuncion(EstadoFuncion estadoFuncion) {
         this.estadoFuncion = estadoFuncion;
+    }
+
+    public Sala getSala() {
+        return sala;
+    }
+
+    public void setSala(Sala sala) {
+        this.sala = sala;
+    }
+
+    public Asiento buscarAsiento (String codigo) {
+        List<Asiento> listaAsientos = sala.getListaAsientos();
+        for (Asiento asiento : listaAsientos) {
+            if (asiento.getCodigo().equalsIgnoreCase(codigo)) {
+                return asiento;
+            }
+        }
+        return null;
+    }
+    public boolean ocuparAsiento (String codigo) {
+        Asiento asiento = buscarAsiento(codigo);
+        if (asiento != null) {
+            if (asiento.getDisponible()) {
+                asiento.setDisponible(false);
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean liberarAsiento (String codigo){
+        Asiento asiento = buscarAsiento(codigo);
+            if (asiento != null) {
+                if (!asiento.getDisponible()) {
+                    asiento.setDisponible(true);
+                    return true;
+                }
+            }
+        return false;
     }
 }

@@ -6,14 +6,11 @@ public class Cliente {
 
    private String identificacion;
    private String nombre;
-
-   //RELACIONES
    private List<Venta> listaVentas;
    private TipoCliente tipoCliente;
 
 
-   public Cliente(String identificacion,String nombre,
-                  List<Venta> listaVentas,TipoCliente tipoCliente) {
+   public Cliente(String identificacion,String nombre, List<Venta> listaVentas,TipoCliente tipoCliente) {
       this.tipoCliente = tipoCliente;
       this.identificacion=identificacion;
       this.nombre= nombre;
@@ -51,4 +48,5 @@ public class Cliente {
    public void setListaVentas(List<Venta> listaVentas) {
       this.listaVentas = listaVentas;
    }
+
 }
