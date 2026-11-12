@@ -6,13 +6,13 @@ public class Venta {
     private String codigo;
     private LocalDateTime fechaHora;
     private double valoPagado;
-    private boolean estadoVenta;
+    private boolean activa;
 
     public Venta(String codigo, LocalDateTime fechaHora, double valoPagado, boolean estadoVenta) {
         this.codigo = codigo;
         this.fechaHora = fechaHora;
         this.valoPagado = valoPagado;
-        this.estadoVenta = estadoVenta;
+        this.activa = estadoVenta;
     }
 
     public String getCodigo() {
@@ -39,17 +39,17 @@ public class Venta {
         this.valoPagado = valoPagado;
     }
 
-    public boolean isEstadoVenta() {
-        return estadoVenta;
+    public boolean isActiva() {
+        return activa;
     }
 
-    public void setEstadoVenta(boolean estadoVenta) {
-        this.estadoVenta = estadoVenta;
+    public void setActiva(boolean activa) {
+        this.activa = activa;
     }
 
     public void cancelar() {
-        if (this.estadoVenta == true) {
-            this.estadoVenta = false; // Cambia el estado a cancelada
+        if (this.activa == true) {
+            this.activa = false; // Cambia el estado a cancelada
             System.out.println("La venta con código " + this.codigo + " ha sido cancelada correctamente.");
         } else {
             System.out.println("Error: La venta con código " + this.codigo + " ya se encuentra cancelada.");
