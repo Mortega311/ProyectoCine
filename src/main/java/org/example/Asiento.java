@@ -37,7 +37,7 @@ public class Asiento {
         this.numero = numero;
     }
 
-    public boolean getDisponible() {
+    public boolean isDisponible() {
         return disponible;
     }
 
