@@ -6,13 +6,14 @@ public class Sala {
     private String codigo;
     private String nombre;
     private int capacidad;
+    private boolean estadoSala;
 
    //RELACIONES
-    private EstadoSala estadoSala;
+
     private List<Asiento> listaAsientos;
 
 
-    public Sala(String codigo, String nombre, int capacidad, EstadoSala estadoSala,
+    public Sala(String codigo, String nombre, int capacidad, boolean estadoSala,
                 List<Asiento> listaAsientos) {
         this.codigo = codigo;
         this.nombre = nombre;
@@ -45,11 +46,19 @@ public class Sala {
         this.capacidad = capacidad;
     }
 
-    public EstadoSala getEstadoSala() {
+    public boolean isEstadoSala() {
         return estadoSala;
     }
 
-    public void setEstadoSala(EstadoSala estadoSala) {
+    public void setEstadoSala(boolean estadoSala) {
         this.estadoSala = estadoSala;
+    }
+
+    public List<Asiento> getListaAsientos() {
+        return listaAsientos;
+    }
+
+    public void setListaAsientos(List<Asiento> listaAsientos) {
+        this.listaAsientos = listaAsientos;
     }
 }

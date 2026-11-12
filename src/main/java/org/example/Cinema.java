@@ -10,16 +10,16 @@ public class Cinema {
     //RELACIONES
     private List<Sala> listaSalas;
     private List<Pelicula> listaPeliculas;
-    private List<Persona> listaPersonas;
+    private List<Cliente> listaClientes;
 
     public Cinema(String nombre, String nit, String direccion, List<Sala> listaSalas,
-                  List<Pelicula> listaPeliculas, List<Persona> listaPersonas) {
+                  List<Pelicula> listaPeliculas, List<Cliente> listaClientes) {
         this.nombre = nombre;
         this.nit = nit;
         this.direccion = direccion;
         this.listaSalas= listaSalas;
         this.listaPeliculas= listaPeliculas;
-        this.listaPersonas= listaPersonas;
+        this.listaClientes= listaClientes;
     }
 
     public String getNombre() {
@@ -44,5 +44,29 @@ public class Cinema {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    public List<Sala> getListaSalas() {
+        return listaSalas;
+    }
+
+    public void setListaSalas(List<Sala> listaSalas) {
+        this.listaSalas = listaSalas;
+    }
+
+    public List<Pelicula> getListaPeliculas() {
+        return listaPeliculas;
+    }
+
+    public void setListaPeliculas(List<Pelicula> listaPeliculas) {
+        this.listaPeliculas = listaPeliculas;
+    }
+
+    public List<Cliente> getListaClientes() {
+        return listaClientes;
+    }
+
+    public void setListaClientes(List<Cliente> listaClientes) {
+        this.listaClientes = listaClientes;
     }
 }

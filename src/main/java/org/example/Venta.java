@@ -6,11 +6,9 @@ public class Venta {
     private String codigo;
     private LocalDateTime fechaHora;
     private double valoPagado;
+    private boolean estadoVenta;
 
-    //RELACIONES
-    private EstadoVenta estadoVenta;
-
-    public Venta(String codigo, LocalDateTime fechaHora, double valoPagado, EstadoVenta estadoVenta) {
+    public Venta(String codigo, LocalDateTime fechaHora, double valoPagado, boolean estadoVenta) {
         this.codigo = codigo;
         this.fechaHora = fechaHora;
         this.valoPagado = valoPagado;
@@ -41,11 +39,11 @@ public class Venta {
         this.valoPagado = valoPagado;
     }
 
-    public EstadoVenta getEstadoVenta() {
+    public boolean isEstadoVenta() {
         return estadoVenta;
     }
 
-    public void setEstadoVenta(EstadoVenta estadoVenta) {
+    public void setEstadoVenta(boolean estadoVenta) {
         this.estadoVenta = estadoVenta;
     }
 }
