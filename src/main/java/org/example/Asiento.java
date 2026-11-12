@@ -4,13 +4,13 @@ public class Asiento {
     private String codigo;
     private int fila;
     private int numero;
-    private boolean estadoAsiento;
+    private boolean disponible;
 
-    public Asiento(String codigo, int fila, int numero, boolean estadoAsiento) {
+    public Asiento(String codigo, int fila, int numero, boolean disponible) {
         this.codigo = codigo;
         this.fila = fila;
         this.numero = numero;
-        this.estadoAsiento = estadoAsiento;
+        this.disponible = disponible;
     }
 
     public String getCodigo() {
@@ -37,11 +37,11 @@ public class Asiento {
         this.numero = numero;
     }
 
-    public boolean isEstadoAsiento() {
-        return estadoAsiento;
+    public boolean getDisponible() {
+        return disponible;
     }
 
-    public void setEstadoAsiento(boolean estadoAsiento) {
-        this.estadoAsiento = estadoAsiento;
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
     }
 }
