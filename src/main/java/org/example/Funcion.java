@@ -2,6 +2,7 @@ package org.example;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Funcion {
@@ -11,17 +12,14 @@ public class Funcion {
     private double valorBase;
 
     //RELACIONES
-    private EstadoFuncion estadoFuncion;
     private Sala sala;
 
 
-    public Funcion(String codigo, LocalDate fecha, LocalTime hora, double valorBase,
-    EstadoFuncion estadoFuncion) {
+    public Funcion(String codigo, LocalDate fecha, LocalTime hora, double valorBase) {
         this.codigo = codigo;
         this.fecha = fecha;
         this.hora = hora;
         this.valorBase = valorBase;
-        this.estadoFuncion= estadoFuncion;
     }
 
     public String getCodigo() {
@@ -54,14 +52,6 @@ public class Funcion {
 
     public void setValorBase(double valorBase) {
         this.valorBase = valorBase;
-    }
-
-    public EstadoFuncion getEstadoFuncion() {
-        return estadoFuncion;
-    }
-
-    public void setEstadoFuncion(EstadoFuncion estadoFuncion) {
-        this.estadoFuncion = estadoFuncion;
     }
 
     public Sala getSala() {
@@ -100,5 +90,22 @@ public class Funcion {
                 }
             }
         return false;
+    }
+    public List<Asiento> obtenerAsientosDisponibles (){
+        List<Asiento> listaAsientosDisponibles = new ArrayList<>();
+        List<Asiento> listaAsientos= sala.getListaAsientos();
+        for (Asiento asiento: listaAsientos){
+            if (asiento.getDisponible()){
+                listaAsientosDisponibles.add(asiento);
+            }
+        }
+        return listaAsientosDisponibles;
+    }
+    public int contarAsientosDisponibles() {
+        return obtenerAsientosDisponibles().size();
+    }
+
+    public int contarAsientosNoDisponibles() {
+        return sala.getListaAsientos().size() - contarAsientosDisponibles();
     }
 }
