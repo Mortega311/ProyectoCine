@@ -10,16 +10,19 @@ public class Funcion {
     private LocalDate fecha;
     private LocalTime hora;
     private double valorBase;
+    private EstadoFuncion estadoFuncion;
+
 
     //RELACIONES
     private Sala sala;
 
 
-    public Funcion(String codigo, LocalDate fecha, LocalTime hora, double valorBase) {
+    public Funcion(String codigo, LocalDate fecha, LocalTime hora, double valorBase, EstadoFuncion disponible) {
         this.codigo = codigo;
         this.fecha = fecha;
         this.hora = hora;
         this.valorBase = valorBase;
+        this.estadoFuncion = disponible;
     }
 
     public String getCodigo() {
@@ -60,6 +63,14 @@ public class Funcion {
 
     public void setSala(Sala sala) {
         this.sala = sala;
+    }
+
+    public EstadoFuncion getEstadoFuncion() {
+        return estadoFuncion;
+    }
+
+    public void setEstadoFuncion(EstadoFuncion estadoFuncion) {
+        this.estadoFuncion = estadoFuncion;
     }
 
     public Asiento buscarAsiento (String codigo) {
