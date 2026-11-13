@@ -1,4 +1,4 @@
-package excepcions;
+package org.example.excepcions;
 
 public class AsientoOcupadoException extends Exception {
     public AsientoOcupadoException(String message) {

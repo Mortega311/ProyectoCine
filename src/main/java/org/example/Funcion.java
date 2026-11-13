@@ -15,9 +15,10 @@ public class Funcion {
 
     //RELACIONES
     private Sala sala;
+    private Pelicula pelicula;
 
 
-    public Funcion(String codigo, LocalDate fecha, LocalTime hora, double valorBase, EstadoFuncion disponible) {
+    public Funcion(String codigo, LocalDate fecha, LocalTime hora, double valorBase, EstadoFuncion disponible, Pelicula pelicula) {
         this.codigo = codigo;
         this.fecha = fecha;
         this.hora = hora;
@@ -71,6 +72,14 @@ public class Funcion {
 
     public void setEstadoFuncion(EstadoFuncion estadoFuncion) {
         this.estadoFuncion = estadoFuncion;
+    }
+
+    public Pelicula getPelicula() {
+        return pelicula;
+    }
+
+    public void setPelicula(Pelicula pelicula) {
+        this.pelicula = pelicula;
     }
 
     public Asiento buscarAsiento (String codigo) {
