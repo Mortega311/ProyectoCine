@@ -146,8 +146,10 @@ public class Cinema {
         return new ArrayList<>();
     }
 
-    public void venderEntrada(String codigoFuncion, Cliente cliente, TipoCliente tipoEntrada,
-                              String codigoAsiento) {
+    public Venta venderEntrada(String codigoFuncion, Cliente cliente, String codigoAsiento) {
+        // La venta se completa cuando se agreguen las validaciones con excepciones.
+        // El precio se calculara con cliente.getTipoCliente().getTarifa().
+        return null;
     }
 
     public void cancelarVenta(String codigoVenta) {
