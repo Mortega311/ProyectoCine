@@ -1,7 +1,6 @@
-package com.cinema.modelo;
+package org.example;
 
-import com.cinema.enums.*;
-import com.cinema.excepciones.*;
+import org.example.excepcions.*;
 import org.example.*;
 
 import java.time.LocalDate;
@@ -190,7 +189,7 @@ public class Cinema {
         funcionSeleccionada.ocuparAsiento(codigoAsientoSeleccionado);
 
 
-        double valorPagadoPorEntrada = clienteComprador.getTipoCliente().calcularValor(funcionSeleccionada.getValorBase());
+        double valorPagadoPorEntrada = clienteComprador.getTipoCliente().getTarifa(funcionSeleccionada.getValorBase());
 
 
         int totalVentasRegistradas = 0;
@@ -201,8 +200,7 @@ public class Cinema {
         }
 
         String codigoVentaGenerado = "VENTA-" + (totalVentasRegistradas + 1);
-        Venta nuevaVenta = new Venta(codigoVentaGenerado, clienteComprador, funcionSeleccionada, asientoEncontrado, LocalDateTime.now(), valorPagadoPorEntrada, EstadoVenta.ACTIVA);
-        listaVentas.add(nuevaVenta);
+        Venta nuevaVenta = new Venta(codigoVentaGenerado, clienteComprador, funcionSeleccionada, asientoEncontrado, LocalDateTime.now(), valorPagadoPorEntrada, true);        listaVentas.add(nuevaVenta);
 
         return nuevaVenta;
     }
@@ -240,7 +238,7 @@ public class Cinema {
         double acumuladorIngresosTotales = 0.0;
         for (Venta ventaIterada : listaVentas) {
             if (ventaIterada.isActiva()) {
-                acumuladorIngresosTotales += ventaIterada.getValoPagado();
+                acumuladorIngresosTotales += ventaIterada.getValorPagado();
             }
         }
         return acumuladorIngresosTotales;

@@ -1,4 +1,4 @@
-package excepcions;
+package org.example.excepcions;
 
 public class SalaNoDisponibleException extends Exception {
     public SalaNoDisponibleException(String message) {
