@@ -1,55 +1,48 @@
 import org.example.*;
+import org.example.excepcions.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-public class App{
+public class App {
     private Cinema cinema;
+
     public static void main(String[] args) {
-    App app = new App();
+        App app = new App();
 
-       app.cinema= new Cinema("CinemAUQ Centro", "900123456-1", "Calle 21 # 15-45");
+        // 1. Inicializar la clase principal Cinema (3 parámetros)
+        app.cinema = new Cinema("CINEMAUQ", "900123456-7", "Universidad del Quindío");
 
-        Pelicula pelicula1 = new Pelicula("P001", "Interestelar", "Ciencia Ficción", LocalTime.of(1,45), true,ClasificacionPelicula.MAYORES_15, null);
-        Pelicula pelicula2 = new Pelicula("P002", "El Padrino", "Drama", LocalTime.of(2,05), true, ClasificacionPelicula.MAYORES_18, null);
+        // 2. Crear datos iniciales de prueba
         try {
-            app.registrarPelicula(pelicula1);
-            JOptionPane.showMessageDialog(null, "Película registrada con éxito.");
+            Pelicula pelicula1 = new Pelicula("P01", "Interestelar", "Ciencia Ficción",
+                    LocalTime.of(2, 49), true, ClasificacionPelicula.MAYORES_12, new ArrayList<>());
+            Pelicula pelicula2 = new Pelicula("P02", "El Padrino", "Drama",
+                    LocalTime.of(2, 55), true, ClasificacionPelicula.MAYORES_18, new ArrayList<>());
+            app.cinema.registrarPelicula(pelicula1);
+            app.cinema.registrarPelicula(pelicula2);
+
+            Sala sala1 = new Sala("S01", "Sala 1", 10, true, new ArrayList<>());
+            sala1.generarAsientos();
+            app.cinema.registrarSala(sala1);
+
+            Funcion funcion1 = new Funcion("F01", LocalDate.now(), LocalTime.of(18, 30),
+                    15000.0, EstadoFuncion.PROGRAMADA, pelicula1);
+            funcion1.setSala(sala1);
+            funcion1.setPelicula(pelicula1);
+            app.cinema.programarFuncion(funcion1);
+
+            Cliente cliente1 = new Cliente("1001234567", "Carlos Gómez", TipoCliente.ESTUDIANTE);
+            app.cinema.venderEntrada("F01", cliente1, "A1");
+
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al registrar la película: " + e.getMessage());
+            System.out.println("Error al inicializar datos de prueba: " + e.getMessage());
         }
-        Sala sala1 = new Sala("S01", "Sala 1 VIP", 50, true,new ArrayList<>());
-        Sala sala2 = new Sala("S02", "Sala 2 Macro XE", 80, true,new ArrayList<>());
-        sala1.generarAsientos();
-        sala2.generarAsientos();
-        app.cinema.registrarSala(sala1);
-        app.cinema.registrarSala(sala2);
-
-
-        Asiento asiento1 = new Asiento("A1", 1, 1, false);
-        Asiento asiento2 = new Asiento("B5", 2, 5, true);
-
-
-        Cliente cliente1 = new Cliente("1094888123", "Carlos Gómez", TipoCliente.ESTUDIANTE);
-        Cliente cliente2 = new Cliente("94321789", "María Fernanda", TipoCliente.GENERAL);
-
-
-        Funcion funcion1 = new Funcion("F001", pelicula1, sala1, LocalDate.of(2026, 6, 15), LocalTime.of(18, 30), 15000.0, EstadoFuncion.PROGRAMADA);
-        Funcion funcion2 = new Funcion("F002", pelicula2, sala2, LocalDate.of(2026, 6, 15), LocalTime.of(21, 0), 18000.0, EstadoFuncion.PROGRAMADA);
-        app.cinema.programarFuncion(funcion1);
-        app.cinema.programarFuncion(funcion2);
-
-        Venta venta1 = new Venta("V01", LocalDateTime.now(), 12000.0, true);
-        Venta venta2= new Venta("V02",LocalDateTime.now(2026,11,3,04,30), 15000,true);
 
         app.iniciar();
-
-
-
     }
 
     private void iniciar() {
@@ -97,9 +90,6 @@ public class App{
     }
 
     private void registrarVenta() {
-        String codigoVenta = JOptionPane.showInputDialog("Código de la venta:");
-        if (codigoVenta == null) return;
-
         String idCliente = JOptionPane.showInputDialog("Identificación del cliente:");
         if (idCliente == null) return;
         String nombreCliente = JOptionPane.showInputDialog("Nombre del cliente:");
@@ -108,16 +98,16 @@ public class App{
         String tipoClienteTexto = JOptionPane.showInputDialog(
                 "Tipo de cliente:\n1. GENERAL\n2. ESTUDIANTE\n3. NIÑO\n4. ADULTO_MAYOR");
         if (tipoClienteTexto == null) return;
+
         TipoCliente tipoCliente = TipoCliente.GENERAL;
         int tipoC = Integer.parseInt(tipoClienteTexto);
         if (tipoC == 2) tipoCliente = TipoCliente.ESTUDIANTE;
         else if (tipoC == 3) tipoCliente = TipoCliente.NINO;
         else if (tipoC == 4) tipoCliente = TipoCliente.ADULTO_MAYOR;
 
-
         Cliente cliente = new Cliente(idCliente, nombreCliente, tipoCliente);
 
-        String codigoFuncion = JOptionPane.showInputDialog("Código de la función:");
+        String codigoFuncion = JOptionPane.showInputDialog("Código de la función (ej. F01):");
         if (codigoFuncion == null) return;
 
         String codigoAsiento = JOptionPane.showInputDialog("Código del asiento (ej. A1):");
@@ -135,7 +125,7 @@ public class App{
     }
 
     private void cancelarVenta() {
-        String codigoVenta = JOptionPane.showInputDialog("Ingrese el código de la venta a cancelar:");
+        String codigoVenta = JOptionPane.showInputDialog("Ingrese el código de la venta a cancelar (ej. VENTA-1):");
         if (codigoVenta == null) return;
 
         try {
@@ -148,31 +138,36 @@ public class App{
 
     private void consultarPeliculas() {
         List<Pelicula> peliculas = cinema.consultarPeliculas();
-        if (peliculas.isEmpty()) {
+        if (peliculas == null || peliculas.isEmpty()) {
             JOptionPane.showMessageDialog(null, "No hay películas registradas.");
             return;
         }
 
-        String texto = "--- PELÍCULAS DISPONIBLES ---\n";
+        String texto = "--- PELÍCULAS REGISTRADAS ---\n";
         for (Pelicula p : peliculas) {
+            String estado = p.isEstadoPelicula() ? "DISPONIBLE" : "NO DISPONIBLE";
             texto += "Código: " + p.getCodigo() + " | " + p.getNombre() + " | Género: " + p.getGenero()
-                    + " | Duración: " + p.getDuracion() + " min | Clasificación: " + p.getClasificacionPelicula() + "\n";
+                    + " | Duración: " + p.getDuracion() + " | Clasificación: " + p.getClasificacionPelicula()
+                    + " | Estado: " + estado + "\n";
         }
         JOptionPane.showMessageDialog(null, texto);
     }
 
     private void consultarFunciones() {
         List<Funcion> funciones = cinema.consultarFunciones();
-        if (funciones.isEmpty()) {
+        if (funciones == null || funciones.isEmpty()) {
             JOptionPane.showMessageDialog(null, "No hay funciones programadas.");
             return;
         }
 
         String texto = "--- FUNCIONES PROGRAMADAS ---\n";
         for (Funcion f : funciones) {
-            texto += "Función: " + f.getCodigo() + " | Película: " + f.getPelicula().getNombre()
-                    + " | Sala: " + f.getSala().getNombre() + " | Hora: " + f.getHora()
-                    + " | Valor Base: $" + f.getValorBase() + "\n";
+            String nombrePeli = (f.getPelicula() != null) ? f.getPelicula().getNombre() : "Sin película";
+            String nombreSala = (f.getSala() != null) ? f.getSala().getNombre() : "Sin sala";
+            texto += "Función: " + f.getCodigo() + " | Película: " + nombrePeli
+                    + " | Sala: " + nombreSala + " | Fecha: " + f.getFecha() + " | Hora: " + f.getHora()
+                    + " | Valor Base: $" + f.getValorBase()
+                    + " | Disponibles: " + f.contarAsientosDisponibles() + "\n";
         }
         JOptionPane.showMessageDialog(null, texto);
     }
@@ -187,7 +182,7 @@ public class App{
 
             String texto = "--- DISPONIBILIDAD ---\n" + ocupacion + "\nAsientos:\n";
             for (Asiento a : asientos) {
-                String estado = a.isDisponible() ? "Ocupado" : "Disponible";
+                String estado = a.isDisponible() ? "Disponible" : "Ocupado";
                 texto += a.getCodigo() + " " + estado + " | ";
             }
             JOptionPane.showMessageDialog(null, texto);
@@ -201,48 +196,73 @@ public class App{
                 "GESTIÓN DE PELÍCULAS\n1. Registrar\n2. Modificar\n3. Deshabilitar");
         if (subOpcion == null) return;
 
-        if (subOpcion.equals("1")) {
-            String codigo = JOptionPane.showInputDialog("Código:");
-            String nombre = JOptionPane.showInputDialog("Nombre:");
-            String genero = JOptionPane.showInputDialog("Género:");
-            LocalTime duracion = LocalTime.parse(JOptionPane.showInputDialog("Duración en minutos:"));
-            Pelicula p = new Pelicula(codigo, nombre, genero, duracion, true, ClasificacionPelicula.TODOS, null);
-            cinema.registrarPelicula(p);
-            JOptionPane.showMessageDialog(null, "Película registrada con éxito.");
-        } else if (subOpcion.equals("2")) {
-            String codigo = JOptionPane.showInputDialog("Código de la película a modificar:");
-            String nombre = JOptionPane.showInputDialog("Nuevo nombre:");
-            String genero = JOptionPane.showInputDialog("Nuevo género:");
-            LocalTime duracion = LocalTime.parse(JOptionPane.showInputDialog("Nueva duración:"));
-            Pelicula datosMod = new Pelicula(codigo, nombre, genero, duracion, true, ClasificacionPelicula.TODOS, new ArrayList<>());
-            cinema.modificarPelicula(codigo, datosMod);
-            JOptionPane.showMessageDialog(null, "Película modificada.");
-        } else if (subOpcion.equals("3")) {
-            String codigo = JOptionPane.showInputDialog("Código de la película a deshabilitar:");
-            cinema.deshabilitarPelicula(codigo);
-            JOptionPane.showMessageDialog(null, "Película deshabilitada.");
+        try {
+            if (subOpcion.equals("1")) {
+                String codigo = JOptionPane.showInputDialog("Código:");
+                if (codigo == null) return;
+                String nombre = JOptionPane.showInputDialog("Nombre:");
+                if (nombre == null) return;
+                String genero = JOptionPane.showInputDialog("Género:");
+                if (genero == null) return;
+                int duracionMin = Integer.parseInt(JOptionPane.showInputDialog("Duración en minutos:"));
+                LocalTime duracion = LocalTime.of(duracionMin / 60, duracionMin % 60);
+
+                Pelicula p = new Pelicula(codigo, nombre, genero, duracion, true, ClasificacionPelicula.TODOS, new ArrayList<>());
+                cinema.registrarPelicula(p);
+                JOptionPane.showMessageDialog(null, "Película registrada con éxito.");
+
+            } else if (subOpcion.equals("2")) {
+                String codigo = JOptionPane.showInputDialog("Código de la película a modificar:");
+                if (codigo == null) return;
+                String nombre = JOptionPane.showInputDialog("Nuevo nombre:");
+                if (nombre == null) return;
+                String genero = JOptionPane.showInputDialog("Nuevo género:");
+                if (genero == null) return;
+                int duracionMin = Integer.parseInt(JOptionPane.showInputDialog("Nueva duración en minutos:"));
+                LocalTime duracion = LocalTime.of(duracionMin / 60, duracionMin % 60);
+
+                Pelicula datosMod = new Pelicula(codigo, nombre, genero, duracion, true, ClasificacionPelicula.TODOS, new ArrayList<>());
+                cinema.modificarPelicula(codigo, datosMod);
+                JOptionPane.showMessageDialog(null, "Película modificada.");
+
+            } else if (subOpcion.equals("3")) {
+                String codigo = JOptionPane.showInputDialog("Código de la película a deshabilitar:");
+                if (codigo == null) return;
+                cinema.deshabilitarPelicula(codigo);
+                JOptionPane.showMessageDialog(null, "Película deshabilitada.");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error en gestión de películas: " + e.getMessage());
         }
     }
 
     private void administrarFunciones() {
-        String codigo = JOptionPane.showInputDialog("Código de función:");
-        String codPelicula = JOptionPane.showInputDialog("Código de la película:");
-        String codSala = JOptionPane.showInputDialog("Código de la sala:");
-        double valorBase = Double.parseDouble(JOptionPane.showInputDialog("Valor base de la entrada:"));
+        try {
+            String codigo = JOptionPane.showInputDialog("Código de función:");
+            if (codigo == null) return;
+            String codPelicula = JOptionPane.showInputDialog("Código de la película:");
+            if (codPelicula == null) return;
+            String codSala = JOptionPane.showInputDialog("Código de la sala:");
+            if (codSala == null) return;
+            String horaTexto = JOptionPane.showInputDialog("Hora de la función (HH:mm, ej. 20:00):");
+            if (horaTexto == null) return;
+            LocalTime hora = LocalTime.parse(horaTexto);
+            double valorBase = Double.parseDouble(JOptionPane.showInputDialog("Valor base de la entrada:"));
 
-        Pelicula p = cinema.buscarPelicula(codPelicula);
-        Sala s = cinema.buscarSala(codSala);
+            Pelicula p = cinema.buscarPelicula(codPelicula);
+            Sala s = cinema.buscarSala(codSala);
 
-        if (p != null && s != null) {
-            Funcion f = new Funcion(codigo, p, s, LocalDate.now(), LocalTime.of(20, 0), valorBase, EstadoFuncion.PROGRAMADA);
-            try {
+            if (p != null && s != null) {
+                Funcion f = new Funcion(codigo, LocalDate.now(), hora, valorBase, EstadoFuncion.PROGRAMADA, p);
+                f.setSala(s);
+                f.setPelicula(p);
                 cinema.programarFuncion(f);
                 JOptionPane.showMessageDialog(null, "Función programada con éxito.");
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+            } else {
+                JOptionPane.showMessageDialog(null, "Película o Sala no encontrada.");
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Película o Sala no encontrada.");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al programar función: " + e.getMessage());
         }
     }
 
@@ -251,25 +271,38 @@ public class App{
                 "GESTIÓN DE SALAS\n1. Registrar\n2. Modificar\n3. Deshabilitar");
         if (subOpcion == null) return;
 
-        if (subOpcion.equals("1")) {
-            String codigo = JOptionPane.showInputDialog("Código de sala:");
-            String nombre = JOptionPane.showInputDialog("Nombre o número de sala:");
-            int capacidad = Integer.parseInt(JOptionPane.showInputDialog("Capacidad:"));
-            Sala sala = new Sala(codigo, nombre, capacidad, true, new ArrayList<>());
-            sala.generarAsientos();
-            cinema.registrarSala(sala);
-            JOptionPane.showMessageDialog(null, "Sala registrada con éxito.");
-        } else if (subOpcion.equals("2")) {
-            String codigo = JOptionPane.showInputDialog("Código de la sala a modificar:");
-            String nombre = JOptionPane.showInputDialog("Nuevo nombre:");
-            int capacidad = Integer.parseInt(JOptionPane.showInputDialog("Nueva capacidad:"));
-            Sala datosMod = new Sala(codigo, nombre, capacidad, true, new ArrayList<>());
-            cinema.modificarSala(codigo, datosMod);
-            JOptionPane.showMessageDialog(null, "Sala modificada.");
-        } else if (subOpcion.equals("3")) {
-            String codigo = JOptionPane.showInputDialog("Código de la sala a deshabilitar:");
-            cinema.deshabilitarSala(codigo);
-            JOptionPane.showMessageDialog(null, "Sala deshabilitada / fuera de servicio.");
+        try {
+            if (subOpcion.equals("1")) {
+                String codigo = JOptionPane.showInputDialog("Código de sala:");
+                if (codigo == null) return;
+                String nombre = JOptionPane.showInputDialog("Nombre o número de sala:");
+                if (nombre == null) return;
+                int capacidad = Integer.parseInt(JOptionPane.showInputDialog("Capacidad:"));
+
+                Sala sala = new Sala(codigo, nombre, capacidad, true, new ArrayList<>());
+                sala.generarAsientos();
+                cinema.registrarSala(sala);
+                JOptionPane.showMessageDialog(null, "Sala registrada con éxito.");
+
+            } else if (subOpcion.equals("2")) {
+                String codigo = JOptionPane.showInputDialog("Código de la sala a modificar:");
+                if (codigo == null) return;
+                String nombre = JOptionPane.showInputDialog("Nuevo nombre:");
+                if (nombre == null) return;
+                int capacidad = Integer.parseInt(JOptionPane.showInputDialog("Nueva capacidad:"));
+
+                Sala datosMod = new Sala(codigo, nombre, capacidad, true, new ArrayList<>());
+                cinema.modificarSala(codigo, datosMod);
+                JOptionPane.showMessageDialog(null, "Sala modificada.");
+
+            } else if (subOpcion.equals("3")) {
+                String codigo = JOptionPane.showInputDialog("Código de la sala a deshabilitar:");
+                if (codigo == null) return;
+                cinema.deshabilitarSala(codigo);
+                JOptionPane.showMessageDialog(null, "Sala deshabilitada / fuera de servicio.");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error en gestión de salas: " + e.getMessage());
         }
     }
 
@@ -278,11 +311,13 @@ public class App{
         double totalIngresos = cinema.totalIngresos();
         Pelicula masVendida = cinema.peliculaMasVendida();
         String nombrePeli = (masVendida != null) ? masVendida.getNombre() : "N/A";
+        int funcionesHoy = cinema.funcionesProgramadas(LocalDate.now()).size();
 
         JOptionPane.showMessageDialog(null,
                 "=== REPORTE GENERAL DEL CINEMA ===\n"
                         + "• Total de entradas vendidas: " + totalEntradas + "\n"
                         + "• Total de ingresos: $" + totalIngresos + "\n"
-                        + "• Película con mayor cantidad de ventas: " + nombrePeli);
+                        + "• Película con mayor cantidad de ventas: " + nombrePeli + "\n"
+                        + "• Funciones programadas para hoy: " + funcionesHoy);
     }
 }
