@@ -12,7 +12,7 @@ public enum TipoCliente {
         this.tarifa = tarifa;
     }
 
-    public Tarifa getTarifa() {
-        return tarifa;
+    public double getTarifa(double valorBase) {
+        return tarifa.calcularValor(valorBase);
     }
 }
