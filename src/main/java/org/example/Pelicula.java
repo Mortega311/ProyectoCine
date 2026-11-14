@@ -83,4 +83,6 @@ public class Pelicula {
     public void setListaFunciones(List<Funcion> listaFunciones) {
         this.listaFunciones = listaFunciones;
     }
+
+
 }

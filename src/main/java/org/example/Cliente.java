@@ -10,7 +10,7 @@ public class Cliente {
    private TipoCliente tipoCliente;
 
 
-   public Cliente(String identificacion,String nombre, List<Venta> listaVentas,TipoCliente tipoCliente) {
+   public Cliente(String identificacion,String nombre,TipoCliente tipoCliente) {
       this.tipoCliente = tipoCliente;
       this.identificacion=identificacion;
       this.nombre= nombre;
