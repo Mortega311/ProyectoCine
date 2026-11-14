@@ -8,7 +8,7 @@ public class Pelicula {
     private String nombre;
     private String genero;
     private LocalTime duracion;
-    private boolean estadoPelicula;
+    private boolean disponible;
 
     //RELACIONES
     private ClasificacionPelicula clasificacionPelicula;
@@ -16,13 +16,13 @@ public class Pelicula {
 
 
     public Pelicula(String codigo, String nombre, String genero, LocalTime duracion,
-                    boolean estadoPelicula, ClasificacionPelicula clasificacionPelicula,
+                    boolean disponible, ClasificacionPelicula clasificacionPelicula,
                     List<Funcion> listaFunciones) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.genero = genero;
         this.duracion = duracion;
-        this.estadoPelicula = estadoPelicula;
+        this.disponible = disponible;
         this.clasificacionPelicula= clasificacionPelicula;
         this.listaFunciones= listaFunciones;
 
@@ -60,12 +60,12 @@ public class Pelicula {
         this.duracion = duracion;
     }
 
-    public boolean isEstadoPelicula() {
-        return estadoPelicula;
+    public boolean isDisponible() {
+        return disponible;
     }
 
-    public void setEstadoPelicula(boolean estadoPelicula) {
-        this.estadoPelicula = estadoPelicula;
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
     }
 
     public ClasificacionPelicula getClasificacionPelicula() {

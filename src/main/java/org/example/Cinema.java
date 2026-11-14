@@ -78,7 +78,7 @@ public class Cinema {
         peliculaExistente.setGenero(datosNuevos.getGenero());
         peliculaExistente.setDuracion(datosNuevos.getDuracion());
         peliculaExistente.setClasificacionPelicula(datosNuevos.getClasificacionPelicula());
-        peliculaExistente.setEstadoPelicula(datosNuevos.isEstadoPelicula());
+        peliculaExistente.setDisponible(datosNuevos.isDisponible());
     }
 
     public void deshabilitarPelicula(String codigoBuscado) throws Exception {
@@ -86,7 +86,7 @@ public class Cinema {
         if (peliculaExistente == null) {
             throw new Exception("La película con código " + codigoBuscado + " no existe.");
         }
-        peliculaExistente.setEstadoPelicula(false);
+        peliculaExistente.setDisponible(false);
     }
 
     public void registrarSala(Sala nuevaSala) throws SalaDuplicadaException {
