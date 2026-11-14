@@ -9,17 +9,19 @@ import javax.swing.JOptionPane;
 
 public class App{
     private Cinema cinema;
-
     public static void main(String[] args) {
     App app = new App();
 
-       app.cinema= new Cinema("CinemAUQ Centro", "900123456-1", "Calle 21 # 15-45",new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+       app.cinema= new Cinema("CinemAUQ Centro", "900123456-1", "Calle 21 # 15-45");
 
-        Pelicula pelicula1 = new Pelicula("P001", "Interestelar", "Ciencia Ficción", LocalTime.of(1,45), ClasificacionPelicula.MAYORES_12, true);
-        Pelicula pelicula2 = new Pelicula("P002", "El Padrino", "Drama", LocalTime.of(2,05), ClasificacionPelicula.MAYORES_18, true);
-        app.cinema.registrarPelicula(pelicula1);
-        app.cinema.registrarPelicula(pelicula2);
-
+        Pelicula pelicula1 = new Pelicula("P001", "Interestelar", "Ciencia Ficción", LocalTime.of(1,45), true,ClasificacionPelicula.MAYORES_15, null);
+        Pelicula pelicula2 = new Pelicula("P002", "El Padrino", "Drama", LocalTime.of(2,05), true, ClasificacionPelicula.MAYORES_18, null);
+        try {
+            app.registrarPelicula(pelicula1);
+            JOptionPane.showMessageDialog(null, "Película registrada con éxito.");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al registrar la película: " + e.getMessage());
+        }
         Sala sala1 = new Sala("S01", "Sala 1 VIP", 50, true,new ArrayList<>());
         Sala sala2 = new Sala("S02", "Sala 2 Macro XE", 80, true,new ArrayList<>());
         sala1.generarAsientos();
@@ -122,7 +124,7 @@ public class App{
         if (codigoAsiento == null) return;
 
         try {
-            Venta venta = cinema.venderEntrada(codigoFuncion, cliente, tipoCliente, codigoAsiento, codigoVenta);
+            Venta venta = cinema.venderEntrada(codigoFuncion, cliente, codigoAsiento);
             JOptionPane.showMessageDialog(null, "¡Venta registrada con éxito!\n"
                     + "Código Venta: " + venta.getCodigo() + "\n"
                     + "Valor Pagado: $" + venta.getValorPagado() + "\n"
@@ -154,7 +156,7 @@ public class App{
         String texto = "--- PELÍCULAS DISPONIBLES ---\n";
         for (Pelicula p : peliculas) {
             texto += "Código: " + p.getCodigo() + " | " + p.getNombre() + " | Género: " + p.getGenero()
-                    + " | Duración: " + p.getDuracion() + " min | Clasificación: " + p.getClasificacion() + "\n";
+                    + " | Duración: " + p.getDuracion() + " min | Clasificación: " + p.getClasificacionPelicula() + "\n";
         }
         JOptionPane.showMessageDialog(null, texto);
     }
@@ -185,7 +187,7 @@ public class App{
 
             String texto = "--- DISPONIBILIDAD ---\n" + ocupacion + "\nAsientos:\n";
             for (Asiento a : asientos) {
-                String estado = a.isEstadoAsiento() ? "Ocupado" : "Disponible";
+                String estado = a.isDisponible() ? "Ocupado" : "Disponible";
                 texto += a.getCodigo() + " " + estado + " | ";
             }
             JOptionPane.showMessageDialog(null, texto);
@@ -203,16 +205,16 @@ public class App{
             String codigo = JOptionPane.showInputDialog("Código:");
             String nombre = JOptionPane.showInputDialog("Nombre:");
             String genero = JOptionPane.showInputDialog("Género:");
-            int duracion = Integer.parseInt(JOptionPane.showInputDialog("Duración en minutos:"));
-            Pelicula p = new Pelicula(codigo, nombre, genero, duracion, ClasificacionPelicula.TODOS, true);
+            LocalTime duracion = LocalTime.parse(JOptionPane.showInputDialog("Duración en minutos:"));
+            Pelicula p = new Pelicula(codigo, nombre, genero, duracion, true, ClasificacionPelicula.TODOS, null);
             cinema.registrarPelicula(p);
             JOptionPane.showMessageDialog(null, "Película registrada con éxito.");
         } else if (subOpcion.equals("2")) {
             String codigo = JOptionPane.showInputDialog("Código de la película a modificar:");
             String nombre = JOptionPane.showInputDialog("Nuevo nombre:");
             String genero = JOptionPane.showInputDialog("Nuevo género:");
-            int duracion = Integer.parseInt(JOptionPane.showInputDialog("Nueva duración:"));
-            Pelicula datosMod = new Pelicula(codigo, nombre, genero, duracion, ClasificacionPelicula.TODOS, true);
+            LocalTime duracion = LocalTime.parse(JOptionPane.showInputDialog("Nueva duración:"));
+            Pelicula datosMod = new Pelicula(codigo, nombre, genero, duracion, true, ClasificacionPelicula.TODOS, new ArrayList<>());
             cinema.modificarPelicula(codigo, datosMod);
             JOptionPane.showMessageDialog(null, "Película modificada.");
         } else if (subOpcion.equals("3")) {
