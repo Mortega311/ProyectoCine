@@ -1,26 +1,22 @@
 package org.example;
 
 import org.example.excepcions.*;
-import org.example.*;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Cinema {
+
     private String nombre;
     private String nit;
     private String direccion;
-
-
     private List<Pelicula> listaPeliculas;
     private List<Sala> listaSalas;
     private List<Funcion> listaFunciones;
     private List<Venta> listaVentas;
 
-
-    public Cinema(String nombre, String nit, String direcciona) {
+    public Cinema(String nombre, String nit, String direccion) {
         this.nombre = nombre;
         this.nit = nit;
         this.direccion = direccion;
@@ -29,6 +25,7 @@ public class Cinema {
         this.listaFunciones = new ArrayList<>();
         this.listaVentas = new ArrayList<>();
     }
+
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
 
@@ -51,12 +48,8 @@ public class Cinema {
     public void setListaVentas(List<Venta> listaVentas) { this.listaVentas = listaVentas; }
 
     public void registrarPelicula(Pelicula nuevaPelicula) throws PeliculaDuplicadaException {
-        int cantidadPeliculasRegistradas = 0;
         for (Pelicula peliculaIterada : listaPeliculas) {
-            if (peliculaIterada != null) {
-                cantidadPeliculasRegistradas++;
-            }
-            if (peliculaIterada.getCodigo().equalsIgnoreCase(nuevaPelicula.getCodigo())) {
+            if (peliculaIterada != null && peliculaIterada.getCodigo().equalsIgnoreCase(nuevaPelicula.getCodigo())) {
                 throw new PeliculaDuplicadaException("Ya existe una película registrada con el código: " + nuevaPelicula.getCodigo());
             }
         }
@@ -68,14 +61,12 @@ public class Cinema {
     }
 
     public Pelicula buscarPelicula(String codigoBuscado) {
-        Pelicula peliculaEncontrada = null;
         for (Pelicula peliculaIterada : listaPeliculas) {
             if (peliculaIterada.getCodigo().equalsIgnoreCase(codigoBuscado)) {
-                peliculaEncontrada = peliculaIterada;
-                break;
+                return peliculaIterada;
             }
         }
-        return peliculaEncontrada;
+        return null;
     }
 
     public void modificarPelicula(String codigoBuscado, Pelicula datosNuevos) throws Exception {
@@ -97,6 +88,7 @@ public class Cinema {
         }
         peliculaExistente.setEstadoPelicula(false);
     }
+
     public void registrarSala(Sala nuevaSala) throws SalaDuplicadaException {
         for (Sala salaIterada : listaSalas) {
             if (salaIterada.getCodigo().equalsIgnoreCase(nuevaSala.getCodigo())) {
@@ -111,14 +103,12 @@ public class Cinema {
     }
 
     public Sala buscarSala(String codigoBuscado) {
-        Sala salaEncontrada = null;
         for (Sala salaIterada : listaSalas) {
             if (salaIterada.getCodigo().equalsIgnoreCase(codigoBuscado)) {
-                salaEncontrada = salaIterada;
-                break;
+                return salaIterada;
             }
         }
-        return salaEncontrada;
+        return null;
     }
 
     public void modificarSala(String codigoBuscado, Sala datosNuevos) throws Exception {
@@ -139,11 +129,9 @@ public class Cinema {
         salaExistente.setEstadoSala(false);
     }
 
-
-
     public void programarFuncion(Funcion nuevaFuncion) throws SalaNoDisponibleException {
-        if (!nuevaFuncion.getSala().isEstadoSala()) {
-            throw new SalaNoDisponibleException("No se puede programar la función. La sala se encuentra fuera de servicio.");
+        if (nuevaFuncion.getSala() == null || !nuevaFuncion.getSala().isEstadoSala()) {
+            throw new SalaNoDisponibleException("No se puede programar la función. La sala se encuentra fuera de servicio o no fue asignada.");
         }
         listaFunciones.add(nuevaFuncion);
     }
@@ -153,17 +141,21 @@ public class Cinema {
     }
 
     public Funcion buscarFuncion(String codigoBuscado) {
-        Funcion funcionEncontrada = null;
         for (Funcion funcionIterada : listaFunciones) {
             if (funcionIterada.getCodigo().equalsIgnoreCase(codigoBuscado)) {
-                funcionEncontrada = funcionIterada;
-                break;
+                return funcionIterada;
             }
         }
-        return funcionEncontrada;
+        return null;
     }
 
-
+    public List<Asiento> consultarDisponibilidad(String codigoFuncion) throws FuncionNoEncontradaException {
+        Funcion funcionEncontrada = buscarFuncion(codigoFuncion);
+        if (funcionEncontrada == null) {
+            throw new FuncionNoEncontradaException("La función con código " + codigoFuncion + " no existe.");
+        }
+        return funcionEncontrada.getSala().getListaAsientos();
+    }
 
     public Venta venderEntrada(String codigoFuncion, Cliente clienteComprador, String codigoAsientoSeleccionado)
             throws FuncionNoEncontradaException, AsientoNoDisponibleException, AsientoOcupadoException {
@@ -187,20 +179,11 @@ public class Cinema {
         }
 
         funcionSeleccionada.ocuparAsiento(codigoAsientoSeleccionado);
-
-
         double valorPagadoPorEntrada = clienteComprador.getTipoCliente().getTarifa(funcionSeleccionada.getValorBase());
 
-
-        int totalVentasRegistradas = 0;
-        for (Venta ventaIterada : listaVentas) {
-            if (ventaIterada != null) {
-                totalVentasRegistradas++;
-            }
-        }
-
-        String codigoVentaGenerado = "VENTA-" + (totalVentasRegistradas + 1);
-        Venta nuevaVenta = new Venta(codigoVentaGenerado, clienteComprador, funcionSeleccionada, asientoEncontrado, LocalDateTime.now(), valorPagadoPorEntrada, true);        listaVentas.add(nuevaVenta);
+        String codigoVentaGenerado = "VENTA-" + (listaVentas.size() + 1);
+        Venta nuevaVenta = new Venta(codigoVentaGenerado, clienteComprador, funcionSeleccionada, asientoEncontrado, LocalDateTime.now(), valorPagadoPorEntrada, true);
+        listaVentas.add(nuevaVenta);
 
         return nuevaVenta;
     }
@@ -211,17 +194,18 @@ public class Cinema {
             throw new VentaNoEncontradaException("La venta con código " + codigoVentaBuscada + " no existe o ya ha sido cancelada.");
         }
         ventaEncontrada.cancelar();
+        if (ventaEncontrada.getFuncion() != null && ventaEncontrada.getAsiento() != null) {
+            ventaEncontrada.getFuncion().liberarAsiento(ventaEncontrada.getAsiento().getCodigo());
+        }
     }
 
     public Venta buscarVenta(String codigoBuscado) {
-        Venta ventaEncontrada = null;
         for (Venta ventaIterada : listaVentas) {
             if (ventaIterada.getCodigo().equalsIgnoreCase(codigoBuscado)) {
-                ventaEncontrada = ventaIterada;
-                break;
+                return ventaIterada;
             }
         }
-        return ventaEncontrada;
+        return null;
     }
 
     public int totalEntradasVendidas() {
@@ -248,14 +232,15 @@ public class Cinema {
         if (listaPeliculas.isEmpty()) {
             return null;
         }
-
         Pelicula peliculaConMayorVenta = null;
-        int maximoVentasEncontradas = -1;
+        int maximoVentasEncontradas = 0;
 
         for (Pelicula peliculaIterada : listaPeliculas) {
             int contadorVentasPorPelicula = 0;
             for (Venta ventaIterada : listaVentas) {
                 if (ventaIterada.isActiva() &&
+                        ventaIterada.getFuncion() != null &&
+                        ventaIterada.getFuncion().getPelicula() != null &&
                         ventaIterada.getFuncion().getPelicula().getCodigo().equalsIgnoreCase(peliculaIterada.getCodigo())) {
                     contadorVentasPorPelicula++;
                 }
@@ -287,6 +272,4 @@ public class Cinema {
         }
         return funcionesFiltradas;
     }
-
-
 }
