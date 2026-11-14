@@ -145,7 +145,7 @@ public class App {
 
         String texto = "--- PELÍCULAS REGISTRADAS ---\n";
         for (Pelicula p : peliculas) {
-            String estado = p.isEstadoPelicula() ? "DISPONIBLE" : "NO DISPONIBLE";
+            String estado = p.isDisponible() ? "DISPONIBLE" : "NO DISPONIBLE";
             texto += "Código: " + p.getCodigo() + " | " + p.getNombre() + " | Género: " + p.getGenero()
                     + " | Duración: " + p.getDuracion() + " | Clasificación: " + p.getClasificacionPelicula()
                     + " | Estado: " + estado + "\n";
